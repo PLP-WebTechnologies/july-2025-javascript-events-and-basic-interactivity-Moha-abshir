@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Web Page Assignment</title>
+  <style>
+    /* Simple styling for clarity */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+      margin: 0;
+      padding: 0 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background: #222;
+      color: #f9f9f9;
+    }
+    .toggle-btn, .counter-btn, .faq-question, .tab-btn {
+      cursor: pointer;
+      margin: 10px 0;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: #fff;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover, .counter-btn:hover, .faq-question:hover, .tab-btn:hover {
+      background: #0056b3;
+    }
+    .faq-answer {
+      display: none;
+      margin: 0 0 10px 20px;
+      color: #444;
+    }
+    .faq-active .faq-answer {
+      display: block;
+    }
+    .tabs {
+      margin: 20px 0;
+    }
+    .tab-btn.active {
+      background: #28a745;
+    }
+    .tab-content {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .error {
+      color: red;
+      font-size: 0.95em;
+    }
+    .success {
+      color: green;
+      font-size: 1em;
+    }
+    form {
+      margin: 30px 0;
+      padding: 15px;
+      background: #f1f1f1;
+      border-radius: 6px;
+      max-width: 350px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Interactive Web Page Assignment</h1>
+  <p>Welcome! This page shows my progress as a beginner learning JavaScript interactivity.</p>
+
+  <!-- Light/Dark Mode Toggle -->
+  <button class="toggle-btn" id="modeToggle">Switch to Dark Mode</button>
+
+  <!-- Counter Game -->
+  <h2>🎮 Simple Counter</h2>
+  <p>Click the button to increase the count!</p>
+  <button class="counter-btn" id="counterBtn">Count: <span id="countNum">0</span></button>
+
+  <!-- Collapsible FAQ Section -->
+  <h2>❓ FAQ</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <button class="faq-question">What is JavaScript?</button>
+      <div class="faq-answer">JavaScript is a programming language used to make web pages interactive.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">What is DOM manipulation?</button>
+      <div class="faq-answer">It means using JavaScript to change the content or style of a web page.</div>
+    </div>
+  </div>
+
+  <!-- Tabbed Interface -->
+  <h2>📑 Tabbed Interface</h2>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tab1">Tab 1</button>
+    <button class="tab-btn" data-tab="tab2">Tab 2</button>
+  </div>
+  <div id="tab1" class="tab-content active">
+    <p>This is the content of Tab 1. You can switch tabs!</p>
+  </div>
+  <div id="tab2" class="tab-content">
+    <p>This is the content of Tab 2. Tabs make content organized.</p>
+  </div>
+
+  <!-- Form Validation -->
+  <h2>📋 Form Validation</h2>
+  <form id="signupForm" novalidate>
+    <label>
+      Name:
+      <input type="text" id="name" required>
+      <span class="error" id="nameError"></span>
+    </label>
+    <label>
+      Email:
+      <input type="email" id="email" required>
+      <span class="error" id="emailError"></span>
+    </label>
+    <label>
+      Password:
+      <input type="password" id="password" required>
+      <span class="error" id="passwordError"></span>
+    </label>
+    <button type="submit" class="counter-btn">Sign Up</button>
+    <div id="formSuccess" class="success"></div>
+  </form>
+
+  <script>
+    // Switches the page between light and dark mode
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        modeToggle.textContent = 'Switch to Light Mode';
+      } else {
+        modeToggle.textContent = 'Switch to Dark Mode';
+      }
+    });
+
+    // Increases the count each time the button is clicked
+    let count = 0;
+    const counterBtn = document.getElementById('counterBtn');
+    const countNum = document.getElementById('countNum');
+    counterBtn.addEventListener('click', function() {
+      count++;
+      countNum.textContent = count;
+    });
+
+    // Shows/hides the answer when a question is clicked
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const item = btn.parentElement;
+        item.classList.toggle('faq-active');
+      });
+    });
+
+    // === Tabbed Interface ===
+    // Switches between different tab contents
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        // Remove active class from all buttons and contents
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        // Add active class to clicked button and its content
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // === Form Validation ===
+    // Validates the form fields and shows error/success messages
+    const signupForm = document.getElementById('signupForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const formSuccess = document.getElementById('formSuccess');
+
+    // Helper function to validate email using regex
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Helper function to validate password (at least 6 chars)
+    function isValidPassword(password) {
+      return password.length >= 6;
+    }
+
+    // Validate on submit
+    signupForm.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent form from submitting
+
+      // Reset errors and success
+      nameError.textContent = '';
+      emailError.textContent = '';
+      passwordError.textContent = '';
+      formSuccess.textContent = '';
+
+      let valid = true;
+
+      // Name validation
+      if (nameInput.value.trim() === '') {
+        nameError.textContent = 'Name is required.';
+        valid = false;
+      }
+
+      // Email validation
+      if (!isValidEmail(emailInput.value)) {
+        emailError.textContent = 'Please enter a valid email.';
+        valid = false;
+      }
+
+      // Password validation
+      if (!isValidPassword(passwordInput.value)) {
+        passwordError.textContent = 'Password must be at least 6 characters.';
+        valid = false;
+      }
+
+      // If all valid, show success
+      if (valid) {
+        formSuccess.textContent = 'Signup successful! 🎉';
+        signupForm.reset();
+      }
+    });
+
+    // Optional: Validate fields as user types
+    nameInput.addEventListener('input', function() {
+      nameError.textContent = nameInput.value.trim() === '' ? 'Name is required.' : '';
+    });
+    emailInput.addEventListener('input', function() {
+      emailError.textContent = isValidEmail(emailInput.value) ? '' : 'Please enter a valid email.';
+    });
+    passwordInput.addEventListener('input', function() {;
+      passwordError.textContent = isValidPassword(passwordInput.value) ? '' : 'Password must be at least 6 characters. ';
+    });
+  </script>
+</body>
+</html>
